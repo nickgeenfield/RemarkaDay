@@ -4,7 +4,7 @@ The Windows installer embeds this directory (`//go:embed payload` in `main.go`).
 
 | File | Role |
 | --- | --- |
-| `manifest.json` | AppLoad manifest. The id stays `org.remarkablecalendar.move`. The name shown in AppLoad is reCalendar. |
+| `manifest.json` | AppLoad manifest. The id stays `org.remarkablecalendar.move`. The name shown in AppLoad is RemarkaDay. |
 | `icon.png` | 64×64 RGB icon, flattened onto white. AppLoad shows it next to the app name. The 256×256 original is `assets/icon.png`. |
 
 Two further files are required before an install can succeed. They are listed in `.gitignore` because they are built from [nguyer/remarkable-calendar](https://github.com/nguyer/remarkable-calendar). That project has no licence file, so this repository does not store them.
@@ -18,18 +18,18 @@ Do not put secrets in this directory. The installer compiles everything here int
 
 The patch and the commands below are for upstream commit `5ee822fffa0d2b7fe462cb73281fa29df3aaaeae`.
 
-## 1. Check out upstream and apply the reCalendar patch
+## 1. Check out upstream and apply the RemarkaDay patch
 
 ```sh
 git clone https://github.com/nguyer/remarkable-calendar
 cd remarkable-calendar
 git checkout 5ee822fffa0d2b7fe462cb73281fa29df3aaaeae
-git apply --exclude=prebuilt-ui/icon.png /path/to/reCalendar/patches/recalendar-changes.patch
+git apply --exclude=prebuilt-ui/icon.png /path/to/RemarkaDay/patches/recalendar-changes.patch
 ```
 
-`patches/recalendar-changes.patch` updates the QML (close button in the week toolbar, long-press to delete in the week and day views) and sets the AppLoad display name to reCalendar. The icon hunk only says that the binary differs; it does not contain the new pixels, so it is excluded. Use the icon already in this directory.
+`patches/recalendar-changes.patch` updates the QML (close button in the week toolbar, long-press to delete in the week and day views) and sets the AppLoad display name to RemarkaDay. The icon hunk only says that the binary differs; it does not contain the new pixels, so it is excluded. Use the icon already in this directory.
 
-Apply the patch before the UI build, so `resources.rcc` contains the reCalendar QML.
+Apply the patch before the UI build, so `resources.rcc` contains the RemarkaDay QML.
 
 ## 2. `resources.rcc` (Qt 6 `rcc`, after the patch)
 
@@ -47,10 +47,10 @@ If `rcc` lives somewhere else, pass that path in `RCC`. The script compiles `pac
 Copy that file here:
 
 ```sh
-cp dist/remarkable-calendar/resources.rcc /path/to/reCalendar/installer/payload/resources.rcc
+cp dist/remarkable-calendar/resources.rcc /path/to/RemarkaDay/installer/payload/resources.rcc
 ```
 
-The same script also writes a placeholder icon and copies the manifest into `dist/`. Leave `installer/payload/icon.png` and `installer/payload/manifest.json` as they are in this repository. The manifest here already matches the patched one: the name is reCalendar and the id is unchanged.
+The same script also writes a placeholder icon and copies the manifest into `dist/`. Leave `installer/payload/icon.png` and `installer/payload/manifest.json` as they are in this repository. The manifest here already matches the patched one: the name is RemarkaDay and the id is unchanged.
 
 ## 3. `backend/entry` (static musl build)
 
@@ -69,10 +69,10 @@ Install a current Rust toolchain, [Zig](https://ziglang.org/download/), and [car
 rustup target add aarch64-unknown-linux-musl
 cargo install cargo-zigbuild
 cargo zigbuild --release --target aarch64-unknown-linux-musl
-mkdir -p /path/to/reCalendar/installer/payload/backend
+mkdir -p /path/to/RemarkaDay/installer/payload/backend
 cp target/aarch64-unknown-linux-musl/release/remarkable-calendar-core \
-   /path/to/reCalendar/installer/payload/backend/entry
-chmod 755 /path/to/reCalendar/installer/payload/backend/entry
+   /path/to/RemarkaDay/installer/payload/backend/entry
+chmod 755 /path/to/RemarkaDay/installer/payload/backend/entry
 ```
 
 `cargo zigbuild --release --target aarch64-unknown-linux-musl` is the release build. Add `--locked` if you want Cargo to use upstream's `Cargo.lock` (that is what upstream's `scripts/build-backend.sh` does for its own target). The crate binary is `remarkable-calendar-core`. AppLoad expects it at `backend/entry`.

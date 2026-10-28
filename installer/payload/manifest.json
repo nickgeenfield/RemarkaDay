@@ -1,6 +1,6 @@
 {
   "id": "org.remarkablecalendar.move",
-  "name": "reCalendar",
+  "name": "RemarkaDay",
   "loadsBackend": true,
   "entry": "/qml/Main.qml",
   "supportsScaling": false,

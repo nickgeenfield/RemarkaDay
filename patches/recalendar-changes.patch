@@ -6,7 +6,7 @@ index 35cffcb..f56bffd 100644
  {
    "id": "org.remarkablecalendar.move",
 -  "name": "Calendar",
-+  "name": "reCalendar",
++  "name": "RemarkaDay",
    "loadsBackend": true,
    "entry": "/qml/Main.qml",
    "supportsScaling": false,
@@ -116,7 +116,7 @@ index 01839f3..4408821 100644
 +            ToolbarButton {
 +                anchors.left: addButton.right
 +                icon: "close"
-+                label: "Close reCalendar"
++                label: "Close RemarkaDay"
 +                onTriggered: app.close()
 +            }
              ToolbarTitle {

@@ -1,8 +1,8 @@
-# reCalendar
+# RemarkaDay
 
-<img src="assets/icon.png" alt="reCalendar icon: a month grid with a red header, blue days and one highlighted day" width="128" height="128">
+<img src="assets/icon.png" alt="RemarkaDay icon: a month grid with a red header, blue days and one highlighted day" width="128" height="128">
 
-reCalendar is a Windows installer, and a small set of improvements, for [reMarkable Calendar](https://github.com/nguyer/remarkable-calendar) by Nicko Guyer (nguyer): an [AppLoad](https://github.com/asivery/rm-appload) app for the reMarkable Paper Pro that syncs with Google Calendar. You get week and day views, two-way Google Calendar sync with an offline queue, and the ability to create, edit and delete events. reCalendar adds a close button in the week toolbar, which returns to AppLoad, and a long-press on an event in the week or day view, which opens the delete confirmation. Upstream publishes no licence file, so this repository does not contain upstream source or binaries. It links to that project, credits it below, and carries the installer plus the reCalendar patch.
+RemarkaDay is a Windows installer, and a small set of improvements, for [reMarkable Calendar](https://github.com/nguyer/remarkable-calendar) by Nicko Guyer (nguyer): an [AppLoad](https://github.com/asivery/rm-appload) app for the reMarkable Paper Pro that syncs with Google Calendar. You get week and day views, two-way Google Calendar sync with an offline queue, and the ability to create, edit and delete events. RemarkaDay adds a close button in the week toolbar, which returns to AppLoad, and a long-press on an event in the week or day view, which opens the delete confirmation. Upstream publishes no licence file, so this repository does not contain upstream source or binaries. It links to that project, credits it below, and carries the installer plus the RemarkaDay patch.
 
 ## Features
 
@@ -12,7 +12,7 @@ reCalendar is a Windows installer, and a small set of improvements, for [reMarka
 | ☑ | Two-way Google Calendar sync | Download calendars and send changes back. Edits made offline wait in a queue and go to Google on the next sync. |
 | ☑ | Create, edit and delete | Manage events with the on-screen keyboard, including an individual occurrence of a recurring event. |
 | ☑ | Long-press delete | Press and hold an event in the week or day view (700 milliseconds) to open the delete confirmation. |
-| ☑ | Close button | In the week toolbar, **Close reCalendar** returns you to AppLoad. |
+| ☑ | Close button | In the week toolbar, **Close RemarkaDay** returns you to AppLoad. |
 
 The rest of the app is upstream's: several Google calendars and their colours, local-only events, an offline date window, and display settings (12- or 24-hour time, fixed or scrolling day). Defaults there are 12-hour time, a fixed 7am–9pm day, and about one month back and six months ahead cached. See the [upstream README](https://github.com/nguyer/remarkable-calendar) for that full list. Editing a whole recurring series, managing guests, and a continuous sync timer are not implemented.
 
@@ -25,9 +25,9 @@ The rest of the app is upstream's: several Google calendars and their colours, l
 
 ## Installation
 
-1. Download `reCalendarInstaller.exe` from the [Releases](https://github.com/nickgeenfield/reCalendar/releases) page.
+1. Download `RemarkaDayInstaller.exe` from the [Releases](https://github.com/nickgeenfield/reCalendar/releases) page.
 2. Windows SmartScreen may warn that it does not recognise the app. Choose **More info**, then **Run anyway**.
-3. On the tablet, switch on Wi-Fi and unlock the device. Close reCalendar if it is already open.
+3. On the tablet, switch on Wi-Fi and unlock the device. Close RemarkaDay if it is already open.
 4. Find the tablet's IP address under **Settings > General > Help > About**.
 5. The SSH user is `root`. The password is under **Settings > General > Help > About > Copyrights and licences** (scroll down). Developer mode is required. The password is case-sensitive and can change after a software update.
 6. Run the installer. Enter the IP address, the user `root`, and the password. The password is not shown as you type.
@@ -36,8 +36,8 @@ The rest of the app is upstream's: several Google calendars and their colours, l
    - **2** — Google sync setup
    - **3** — Uninstall
    - **4** — Quit
-8. After install or update, on the tablet open AppLoad and tap **Reload**. If reCalendar still does not appear, restart the UI with mods, for example via reManager.
-9. For Google sync, keep reCalendar closed and continue with [Google sync setup](#google-sync-setup). You can do that straight away (option 2) or run the installer again later.
+8. After install or update, on the tablet open AppLoad and tap **Reload**. If RemarkaDay still does not appear, restart the UI with mods, for example via reManager.
+9. For Google sync, keep RemarkaDay closed and continue with [Google sync setup](#google-sync-setup). You can do that straight away (option 2) or run the installer again later.
 
 Install and update replace the AppLoad files under `/home/root/xovi/exthome/appload/remarkable-calendar`. They leave the event database and any existing Google credentials alone.
 
@@ -47,7 +47,7 @@ Option 4, or answering no to the uninstall question, changes nothing.
 
 ## Google sync setup
 
-Google sync uses an OAuth client in a Cloud project you control. This is once per account. Afterwards the tablet syncs on its own. Keep reCalendar closed until the initial sync has finished, so the app does not save UTC before you have chosen a timezone.
+Google sync uses an OAuth client in a Cloud project you control. This is once per account. Afterwards the tablet syncs on its own. Keep RemarkaDay closed until the initial sync has finished, so the app does not save UTC before you have chosen a timezone.
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) and create a project (or select one).
 2. In the API Library, enable **Google Calendar API**.
@@ -58,7 +58,7 @@ Google sync uses an OAuth client in a Cloud project you control. This is once pe
 7. A browser opens for Google sign-in. Grant both Calendar permissions (read, and edit events). If Google says **Google hasn't verified this app**, choose **Continue**. That message is normal for a personal Cloud project in Testing; it is not the same failure as forgetting the test user.
 8. The installer uploads credentials to the tablet and can run the first sync. When it asks for a timezone, use a full IANA name such as `Europe/London`. **`London` on its own fails with `ParseError`.** Other examples: `Europe/Paris`, `America/New_York`.
 
-Then, on the tablet: AppLoad → **Reload** → reCalendar → the gear icon. Check the display timezone, refresh the calendar list, tick the calendars you want, and choose **Save & sync**.
+Then, on the tablet: AppLoad → **Reload** → RemarkaDay → the gear icon. Check the display timezone, refresh the calendar list, tick the calendars you want, and choose **Save & sync**.
 
 `client.json` (the Desktop client you downloaded) and `google.json` (the refresh token on the tablet) are different files. See [Security](#security).
 
@@ -74,7 +74,7 @@ Then, on the tablet: AppLoad → **Reload** → reCalendar → the gear icon. Ch
 | Keep an event only on the tablet | Choose **Local events** in the editor. |
 | Edit an event | Open it and tap the pencil. |
 | Delete an event | Open it and tap the bin, or press and hold the event in the week or day view until the delete confirmation appears. |
-| Leave the app | In the week toolbar, tap **Close reCalendar**. |
+| Leave the app | In the week toolbar, tap **Close RemarkaDay**. |
 | Sync | Tap **Sync** while the tablet is on Wi-Fi. Offline edits stay queued until then. |
 | See queued changes | Open **Settings**. |
 
@@ -87,7 +87,7 @@ The editor wants dates as `YYYY-MM-DD` and times as `HH:MM` in 24-hour form, eve
 | SmartScreen blocks the installer | **More info**, then **Run anyway**. |
 | Cannot connect | Same Wi-Fi, tablet on and unlocked, developer mode on. IP from **Settings > General > Help > About**. User `root`. Password from **Copyrights and licences**, typed with the original case. Over USB the address is usually `10.11.99.1`. |
 | "XOVI isn't installed" or AppLoad is missing | Install XOVI and the AppLoad extension first. The installer does not change the tablet in that case. |
-| reCalendar does not appear, or the UI looks old | Close the app, AppLoad → **Reload**, then open it again. If it is still missing, restart the UI with mods (for example via reManager). |
+| RemarkaDay does not appear, or the UI looks old | Close the app, AppLoad → **Reload**, then open it again. If it is still missing, restart the UI with mods (for example via reManager). |
 | **Access blocked: … has not completed the Google verification process** | OAuth consent screen is **External** and in **Testing**, and the Google account is added as a test user. Then sign in again. |
 | **Google hasn't verified this app** | Choose **Continue**. Expected for your own Testing client. |
 | Timezone `ParseError` | Use a full IANA name (`Europe/London`). A city alone (`London`) is rejected. |
@@ -104,10 +104,10 @@ The release executable is the supported way to install. To build it yourself, pr
 
 ```sh
 cd installer
-GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w' -o reCalendarInstaller.exe .
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w' -o RemarkaDayInstaller.exe .
 ```
 
-From a module rooted at the repository, the same build is `GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w' -o reCalendarInstaller.exe ./installer`. In this tree `go.mod` is already inside `installer/`, so the package path is `.`. `CGO_ENABLED=0` keeps the executable free of a C toolchain. The result is `installer/reCalendarInstaller.exe`. Executables and zip archives are gitignored.
+From a module rooted at the repository, the same build is `GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w' -o RemarkaDayInstaller.exe ./installer`. In this tree `go.mod` is already inside `installer/`, so the package path is `.`. `CGO_ENABLED=0` keeps the executable free of a C toolchain. The result is `installer/RemarkaDayInstaller.exe`. Executables and zip archives are gitignored.
 
 Check the installer package with:
 
@@ -123,7 +123,7 @@ Handwriting pad: long-press an empty slot, write with the pen, recognise the han
 
 ## Credits
 
-- **[nguyer/remarkable-calendar](https://github.com/nguyer/remarkable-calendar)** by Nicko Guyer. reCalendar is that app plus the patch in `patches/recalendar-changes.patch` (close button, long-press delete, and the reCalendar name) and the icon in `assets/icon.png`. The calendar itself — sync, storage, views and the QML shell — is his work. Thank you.
+- **[nguyer/remarkable-calendar](https://github.com/nguyer/remarkable-calendar)** by Nicko Guyer. RemarkaDay is that app plus the patch in `patches/recalendar-changes.patch` (close button, long-press delete, and the RemarkaDay name) and the icon in `assets/icon.png`. The calendar itself — sync, storage, views and the QML shell — is his work. Thank you.
 - **[AppLoad](https://github.com/asivery/rm-appload)** by asivery, which loads the app on the tablet.
 - **[XOVI](https://github.com/asivery/rm-xovi-extensions)** by asivery, which AppLoad runs on.
 

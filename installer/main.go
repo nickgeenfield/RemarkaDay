@@ -33,7 +33,7 @@ import (
 
 const (
 	version    = "0.8.0"
-	appName    = "reCalendar"
+	appName    = "RemarkaDay"
 	appID      = "remarkable-calendar" // folder under AppLoad
 	defaultIP  = "10.11.99.1"
 	defaultUsr = "root"
@@ -82,15 +82,15 @@ func main() {
 func run() int {
 	fmt.Printf("%s installer, version %s\n", appName, version)
 	fmt.Println(strings.Repeat("-", 40))
-	fmt.Println("This installs, updates or removes the reCalendar app on a reMarkable")
+	fmt.Println("This installs, updates or removes the RemarkaDay app on a reMarkable")
 	fmt.Println("tablet that already has XOVI and AppLoad. The app is")
 	fmt.Println("https://github.com/nguyer/remarkable-calendar by nguyer.")
 	fmt.Println()
 	fmt.Println("Before you start:")
 	fmt.Println("  - Connect the tablet to this computer with its USB cable, switch it on and unlock it.")
-	fmt.Println("  - Close reCalendar on the tablet if it is open.")
+	fmt.Println("  - Close RemarkaDay on the tablet if it is open.")
 	fmt.Println("  - You need the tablet's SSH password. On the tablet go to")
-	fmt.Println("    Settings > General > Help > About > Copyrights and licences and scroll down;")
+	fmt.Println("    Settings > General > Help > About > Copyrights and licenses and scroll down;")
 	fmt.Println("    the password is shown there (developer mode is needed for SSH).")
 	fmt.Println()
 
@@ -118,9 +118,9 @@ func run() int {
 	for {
 		fmt.Println()
 		fmt.Println("What would you like to do?")
-		fmt.Println("  1  Install or update reCalendar")
+		fmt.Println("  1  Install or update RemarkaDay")
 		fmt.Println("  2  Set up Google sync")
-		fmt.Println("  3  Uninstall reCalendar")
+		fmt.Println("  3  Uninstall RemarkaDay")
 		fmt.Println("  4  Quit")
 		switch strings.TrimSpace(prompt("Choose 1, 2, 3 or 4: ")) {
 		case "1":
@@ -245,7 +245,7 @@ func friendlyConnError(err error, host string) string {
 	case strings.Contains(msg, "unable to authenticate") || strings.Contains(msg, "no supported methods remain"):
 		return "The tablet rejected the password (or username).\n" +
 			"Check the password on the tablet under Settings > General > Help > About >\n" +
-			"Copyrights and licences. It is case-sensitive, and it can change after a software update.\n" +
+			"Copyrights and licenses. It is case-sensitive, and it can change after a software update.\n" +
 			"The username is normally root."
 	case strings.Contains(msg, "i/o timeout") || strings.Contains(msg, "no route to host") ||
 		strings.Contains(msg, "network is unreachable") || strings.Contains(msg, "connection refused") ||
@@ -301,11 +301,11 @@ func checkAppLoad(c *ssh.Client) error {
 		return nil
 	case "NOXOVI":
 		return errors.New("XOVI isn't installed on this tablet (/home/root/xovi wasn't found).\n" +
-			"reCalendar needs XOVI and the AppLoad extension. Install those first, then run this again.\n" +
+			"RemarkaDay needs XOVI and the AppLoad extension. Install those first, then run this again.\n" +
 			"Nothing was changed.")
 	default:
 		return errors.New("XOVI is installed, but AppLoad isn't (" + apploadDir + " wasn't found).\n" +
-			"reCalendar runs inside AppLoad. Install the AppLoad extension for XOVI first, then run this again.\n" +
+			"RemarkaDay runs inside AppLoad. Install the AppLoad extension for XOVI first, then run this again.\n" +
 			"Nothing was changed.")
 	}
 }
@@ -355,9 +355,9 @@ func install(c *ssh.Client) error {
 	fmt.Println()
 	fmt.Println("Next steps:")
 	fmt.Println("  1. On the tablet open AppLoad and tap Reload (the project's README says a full")
-	fmt.Println("     UI restart isn't needed). If reCalendar still doesn't appear, restart the UI")
+	fmt.Println("     UI restart isn't needed). If RemarkaDay still doesn't appear, restart the UI")
 	fmt.Println("     with mods in reManager.")
-	fmt.Println("  2. For Google sync, keep reCalendar closed and choose option 2 in this installer")
+	fmt.Println("  2. For Google sync, keep RemarkaDay closed and choose option 2 in this installer")
 	fmt.Println("     (or run it again later). Local-only events work without Google.")
 	fmt.Println("Your event database and any existing Google credentials were left alone.")
 	return nil
@@ -452,7 +452,7 @@ func catPutBytes(c *ssh.Client, data []byte, dst string, mode os.FileMode) error
 
 func uninstall(c *ssh.Client) error {
 	fmt.Println()
-	if !yesNo("Remove the reCalendar app from this tablet?", false) {
+	if !yesNo("Remove the RemarkaDay app from this tablet?", false) {
 		fmt.Println("Nothing was changed.")
 		return nil
 	}
@@ -466,7 +466,7 @@ func uninstall(c *ssh.Client) error {
 		return fmt.Errorf("%v %s", err, out)
 	}
 	fmt.Println()
-	fmt.Println("reCalendar has been removed.")
+	fmt.Println("RemarkaDay has been removed.")
 	if wipeData {
 		fmt.Println("Google credentials and the event database were deleted.")
 	} else {
@@ -508,7 +508,7 @@ func googleSetup(c *ssh.Client) error {
 	fmt.Println("     and add the Gmail account you will sign in with as a test user.")
 	fmt.Println("  4. Create an OAuth client of type \"Desktop app\" and download its JSON file.")
 	fmt.Println()
-	fmt.Println("Keep reCalendar closed on the tablet until this finishes.")
+	fmt.Println("Keep RemarkaDay closed on the tablet until this finishes.")
 	fmt.Println()
 
 	clientPath := strings.Trim(prompt("Path to the downloaded client JSON: "), `"' `)
@@ -557,15 +557,15 @@ func googleSetup(c *ssh.Client) error {
 	fmt.Println("Credentials are on the tablet at " + googlePath + ".")
 	fmt.Println("(Secrets are never printed by this installer.)")
 
-	if !yesNo("Run the initial sync now? (tablet needs Wi-Fi; keep reCalendar closed)", true) {
+	if !yesNo("Run the initial sync now? (tablet needs Wi-Fi; keep RemarkaDay closed)", true) {
 		fmt.Println()
-		fmt.Println("You can sync later from AppLoad → reCalendar → Settings, or re-run this option.")
+		fmt.Println("You can sync later from AppLoad → RemarkaDay → Settings, or re-run this option.")
 		return nil
 	}
 	tz := ask("Display timezone (IANA name)", defaultTZ)
 	start, end := syncWindow(time.Now())
 	fmt.Printf("Syncing primary calendar from %s to %s (%s)...\n", start, end, tz)
-	fmt.Println("This can take a minute. Keep the tablet on Wi-Fi and reCalendar closed.")
+	fmt.Println("This can take a minute. Keep the tablet on Wi-Fi and RemarkaDay closed.")
 	cmd := fmt.Sprintf("%s google-sync %s %s %s", entryPath, shellQuote(start), shellQuote(end), shellQuote(tz))
 	out, err := runCmd(c, cmd)
 	if err != nil {
@@ -657,7 +657,7 @@ func runOAuth(client desktopClient) (googleCredentials, error) {
 			http.Error(w, "Missing authorisation code", 400)
 			return
 		}
-		io.WriteString(w, "You can close this tab and return to the reCalendar installer.")
+		io.WriteString(w, "You can close this tab and return to the RemarkaDay installer.")
 		select {
 		case codeCh <- code:
 		default:
