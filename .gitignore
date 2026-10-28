@@ -1,0 +1,7 @@
+# Upstream-derived payload binaries. Build them locally; do not commit them.
+installer/payload/resources.rcc
+installer/payload/backend/
+
+# Installer build products
+*.exe
+*.zip

@@ -1,0 +1,139 @@
+diff --git a/packaging/appload/manifest.json b/packaging/appload/manifest.json
+index 35cffcb..f56bffd 100644
+--- a/packaging/appload/manifest.json
++++ b/packaging/appload/manifest.json
+@@ -1,6 +1,6 @@
+ {
+   "id": "org.remarkablecalendar.move",
+-  "name": "Calendar",
++  "name": "reCalendar",
+   "loadsBackend": true,
+   "entry": "/qml/Main.qml",
+   "supportsScaling": false,
+diff --git a/prebuilt-ui/icon.png b/prebuilt-ui/icon.png
+index 6fcc243..939ccb5 100644
+Binary files a/prebuilt-ui/icon.png and b/prebuilt-ui/icon.png differ
+diff --git a/qml/DayView.qml b/qml/DayView.qml
+index e4f421e..f265df8 100644
+--- a/qml/DayView.qml
++++ b/qml/DayView.qml
+@@ -6,6 +6,15 @@ Item {
+     property alias timeline: dayList
+     component DayGestureArea: MouseArea {
+         signal tapped(real x, real y)
++        signal held(real x, real y)
++        pressAndHoldInterval: 700
++        onPressAndHold: function (mouse) {
++            if (!tapCandidate)
++                return;
++            tapCandidate = false;
++            horizontal = false;
++            held(mouse.x, mouse.y);
++        }
+         property real startX: 0
+         property real startY: 0
+         property bool horizontal: true
+@@ -96,6 +105,7 @@ Item {
+                     DayGestureArea {
+                         anchors.fill: parent
+                         onTapped: app.openEvent(modelData, "day")
++                        onHeld: app.askDelete(modelData)
+                     }
+                 }
+             }
+@@ -200,6 +210,9 @@ Item {
+                 onTapped: function (x, y) {
+                     app.openTimelineTap(x, y);
+                 }
++                onHeld: function (x, y) {
++                    app.timelineHoldDelete(x, y);
++                }
+             }
+         }
+     }
+diff --git a/qml/Main.qml b/qml/Main.qml
+index eeb99e1..10e15ec 100644
+--- a/qml/Main.qml
++++ b/qml/Main.qml
+@@ -375,6 +375,21 @@ Rectangle {
+         })
+         if (hit.length) openEvent(hit[0].event,"day")
+     }
++    function timelineHoldDelete(x,y) {
++        var contentWidth=dayList.width-90
++        var g=dayGeometry()
++        var hit=daySchedule.filter(function(e) {
++            var left=84+e.lane*contentWidth/e.lanes
++            return x>=left && x<left+contentWidth/e.lanes-4 && y>=(e.viewStart-g.start)*g.scale && y<(e.renderEnd-g.start)*g.scale
++        })
++        if (hit.length) askDelete(hit[0].event)
++    }
++    function askDelete(event) {
++        if (!event || !event.id || syncBusy) return
++        if (event.details && event.details.writable === false) return
++        editMessage = ""
++        confirmChange = { operation: "delete", id: event.id, title: event.title }
++    }
+     function localDate(value) {
+         var parts = value.split("-")
+         return new Date(Number(parts[0]),Number(parts[1])-1,Number(parts[2]),12)
+@@ -415,6 +430,19 @@ Rectangle {
+         if (hit.length) openEvent(hit[0],"")
+         else openDay(offset)
+     }
++    function weeklyHoldDelete(x, y) {
++        var offset = Math.floor(y / (weekView.height / 7))
++        if (offset < 0 || offset > 6) return
++        var items=events.filter(function(e) { return e.offset===offset })
++        var columnWidth = (weekView.width - 10 - 86 - 18) / 2
++        var column = x >= 86 && x < 86 + columnWidth ? 0 : (x >= 86 + columnWidth + 18 && x < weekView.width-10 ? 1 : -1)
++        var localY = y - offset * weekView.height / 7 - 10
++        var limit = Math.max(0, weekView.height / 7 - 28)
++        var hit = items.filter(function(e) {
++            return e.column === column && e.layoutY + e.layoutHeight <= limit && localY >= e.layoutY && localY < e.layoutY + e.layoutHeight
++        })
++        if (hit.length) askDelete(hit[0])
++    }
+     function reflowEvents() {
+         if (layoutReady && events.length) events = arrangeEvents(events)
+     }
+diff --git a/qml/WeekView.qml b/qml/WeekView.qml
+index 01839f3..4408821 100644
+--- a/qml/WeekView.qml
++++ b/qml/WeekView.qml
+@@ -37,6 +37,7 @@ Item {
+                 onTriggered: app.selectedDate = new Date()
+             }
+             ToolbarButton {
++                id: addButton
+                 anchors.left: todayButton.right
+                 icon: "add"
+                 label: "New event"
+@@ -53,6 +54,12 @@ Item {
+                     app.fetchSettings();
+                 }
+             }
++            ToolbarButton {
++                anchors.left: addButton.right
++                icon: "close"
++                label: "Close reCalendar"
++                onTriggered: app.close()
++            }
+             ToolbarTitle {
+                 anchors.horizontalCenter: parent.horizontalCenter
+                 text: Qt.formatDate(app.dayAt(0), "MMM d") + " – " + Qt.formatDate(app.dayAt(6), "MMM d")
+@@ -236,6 +243,14 @@ Item {
+                     app.openWeeklyTap(mouse.x, mouse.y);
+                 tapCandidate = false;
+             }
++            pressAndHoldInterval: 700
++            onPressAndHold: function (mouse) {
++                if (!tapCandidate)
++                    return;
++                tapCandidate = false;
++                eligible = false;
++                app.weeklyHoldDelete(mouse.x, mouse.y);
++            }
+             onCanceled: {
+                 eligible = false;
+                 tapCandidate = false;
